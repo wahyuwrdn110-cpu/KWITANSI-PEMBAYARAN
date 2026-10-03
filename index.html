@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f6fa" />
+    <title>Generator Kwitansi Denda — Sembung Batik Cup</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Generator kwitansi">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>kwitansi<span class="brand-light">studio</span></span>
+      </a>
+      <div class="topbar-note" id="connection-status"><span class="status-dot"></span> Menghubungkan ke penyimpanan online…</div>
+    </header>
+
+    <main class="app-shell">
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">SEMBUNG BATIK CUP · ADMINISTRASI</p>
+          <h1>Buat bukti pelunasan</h1>
+          <p class="page-description">Isi data pembayaran denda dan cetak kwitansi yang siap dibagikan.</p>
+        </div>
+        <button class="button button-primary print-button" id="print-button" type="button">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M6 7V3.5h8V7M6 14H4.5A1.5 1.5 0 0 1 3 12.5v-4A1.5 1.5 0 0 1 4.5 7h11A1.5 1.5 0 0 1 17 8.5v4a1.5 1.5 0 0 1-1.5 1.5H14M6 11h8v6H6z" />
+            <path d="M14.5 9.5h.01" />
+          </svg>
+          Cetak / Simpan PDF
+        </button>
+      </section>
+
+      <div class="workspace">
+        <section class="editor-panel" aria-label="Form kwitansi">
+          <form id="receipt-form">
+            <section class="form-card admin-card">
+              <div class="section-heading">
+                <span class="section-icon" aria-hidden="true">↗</span>
+                <div>
+                  <h2>Akses admin</h2>
+                  <p>Masuk untuk mengubah identitas bersama</p>
+                </div>
+              </div>
+              <div id="admin-login-form" class="admin-login-form">
+                <div class="field">
+                  <label for="admin-email">Email admin</label>
+                  <input id="admin-email" type="email" autocomplete="username" placeholder="admin@email.com" required />
+                </div>
+                <div class="field">
+                  <label for="admin-password">Kata sandi</label>
+                  <input id="admin-password" type="password" autocomplete="current-password" placeholder="Kata sandi akun Supabase" required />
+                </div>
+                <div class="admin-auth-actions field-full">
+                  <span id="admin-session-status" aria-live="polite">Belum masuk</span>
+                  <button class="button button-primary" id="admin-login-button" type="button">Masuk admin</button>
+                  <button class="button button-secondary" id="admin-logout-button" type="button" hidden>Keluar</button>
+                </div>
+              </div>
+            </section>
+            <details class="form-card header-settings" id="header-settings">
+              <summary class="section-heading">
+                <span class="section-icon" aria-hidden="true">01</span>
+                <span class="header-settings-title">
+                  <strong>Identitas &amp; pengesahan</strong>
+                  <span>Data bersama dari Supabase · masuk admin untuk mengedit</span>
+                </span>
+                <span class="disclosure-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="organizer-name">Nama penyelenggara</label>
+                  <input id="organizer-name" type="text" value="PANITIA PENYELENGGARA" disabled />
+                </div>
+                <div class="field">
+                  <label for="event-name">Nama turnamen</label>
+                  <input id="event-name" type="text" value="SEMBUNG BATIK CUP 2026" disabled />
+                </div>
+                <div class="field field-full">
+                  <label for="organizer-address">Alamat / sekretariat</label>
+                  <textarea id="organizer-address" rows="2" disabled>Sekretariat: Kompleks Lap. Gambiranom, Guwosari, Lendah, Kulon Progo</textarea>
+                </div>
+                <div class="field field-full">
+                  <label for="organization-logo">Logo panitia <span class="optional-label">opsional · PNG, JPG, SVG</span></label>
+                  <input id="organization-logo" class="file-input" type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp" disabled />
+                </div>
+                <div class="identity-divider field-full">
+                  <strong>Identitas penandatangan</strong>
+                  <span>Ditampilkan pada bagian pengesahan kwitansi</span>
+                </div>
+                <div class="field">
+                  <label for="signer-title">Jabatan</label>
+                  <input id="signer-title" type="text" value="Ketua Panitia" disabled />
+                </div>
+                <div class="field">
+                  <label for="signer-name">Nama penandatangan</label>
+                  <input id="signer-name" type="text" value="Mufangat" disabled />
+                </div>
+                <div class="field field-full">
+                  <label for="signature-image">Gambar tanda tangan / stempel <span class="optional-label">opsional</span></label>
+                  <input id="signature-image" class="file-input" type="file" accept="image/png,image/jpeg,image/webp" disabled />
+                </div>
+                <div class="identity-actions field-full">
+                  <button class="button button-secondary identity-edit-button" id="identity-edit-button" type="button">Edit identitas</button>
+                  <div class="identity-edit-actions" id="identity-edit-actions" hidden>
+                    <button class="button button-secondary" id="identity-cancel-button" type="button">Batal</button>
+                    <button class="button button-primary" id="identity-save-button" type="button">Simpan identitas</button>
+                  </div>
+                </div>
+                <p class="header-save-status field-full" id="header-save-status" aria-live="polite">
+                  Memuat identitas bersama…
+                </p>
+              </div>
+            </details>
+
+            <section class="form-card">
+              <div class="section-heading">
+                <span class="section-icon" aria-hidden="true">02</span>
+                <div>
+                  <h2>Informasi kwitansi</h2>
+                  <p>Nomor, tanggal, dan status pembayaran</p>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="field field-full">
+                  <label for="receipt-number">Nomor nota</label>
+                  <input id="receipt-number" type="text" value="SBC/2026/002" />
+                </div>
+                <div class="field">
+                  <label for="payment-date">Tanggal pelunasan</label>
+                  <input id="payment-date" type="date" />
+                </div>
+                <div class="field">
+                  <label for="payment-method">Metode bayar</label>
+                  <input id="payment-method" type="text" placeholder="Contoh: Tunai / Transfer" />
+                </div>
+                <div class="field field-full">
+                  <label for="payment-status">Status</label>
+                  <select id="payment-status">
+                    <option value="Sah/Terverifikasi">Sah/Terverifikasi</option>
+                    <option value="Lunas">Lunas</option>
+                    <option value="Menunggu verifikasi">Menunggu verifikasi</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-card">
+              <div class="section-heading">
+                <span class="section-icon" aria-hidden="true">03</span>
+                <div>
+                  <h2>Pembayar</h2>
+                  <p>Pihak yang menyerahkan pembayaran</p>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="field field-full">
+                  <label for="payer-name">Telah diterima dari</label>
+                  <input id="payer-name" type="text" value="KCC KASONGAN" />
+                </div>
+              </div>
+            </section>
+
+            <section class="form-card">
+              <div class="section-heading">
+                <span class="section-icon" aria-hidden="true">04</span>
+                <div>
+                  <h2>Rincian denda</h2>
+                  <p>Tambahkan pemain dan jumlah denda yang dibayar</p>
+                </div>
+              </div>
+              <div id="items-editor" class="items-editor"></div>
+              <button class="button button-secondary add-item-button" id="add-item-button" type="button">
+                <span aria-hidden="true">+</span> Tambah pemain
+              </button>
+            </section>
+
+          </form>
+        </section>
+
+        <aside class="preview-panel" aria-label="Preview kwitansi">
+          <div class="preview-toolbar">
+            <div>
+              <p class="eyebrow">PREVIEW LANGSUNG</p>
+              <h2>Bukti pelunasan denda</h2>
+            </div>
+            <span class="live-badge"><span></span> Live</span>
+          </div>
+          <article class="receipt-paper" id="receipt-preview" aria-live="polite">
+            <div class="paper-accent" aria-hidden="true"></div>
+            <header class="receipt-letterhead">
+              <div class="receipt-logo" id="logo-wrap" hidden>
+                <img id="preview-logo" alt="Logo panitia" />
+              </div>
+              <div class="letterhead-text">
+                <h2 id="preview-organizer-name"></h2>
+                <h3 id="preview-event-name"></h3>
+                <p id="preview-organizer-address"></p>
+              </div>
+            </header>
+
+            <div class="receipt-divider"></div>
+
+            <section class="receipt-title">
+              <h1>NOTA PEMBAYARAN / KWITANSI</h1>
+              <p>BUKTI PELUNASAN DENDA</p>
+            </section>
+
+            <section class="receipt-details" aria-label="Detail pembayaran">
+              <div class="detail-cell">
+                <span>No. Nota</span><strong id="preview-receipt-number"></strong>
+              </div>
+              <div class="detail-cell">
+                <span>Tanggal Pelunasan</span><strong id="preview-payment-date"></strong>
+              </div>
+              <div class="detail-cell">
+                <span>Metode Bayar</span><strong id="preview-payment-method"></strong>
+              </div>
+              <div class="detail-cell">
+                <span>Status</span><strong class="status-value" id="preview-payment-status"></strong>
+              </div>
+            </section>
+
+            <section class="received-from">
+              <p class="receipt-label">TELAH DITERIMA DARI</p>
+              <h3 id="preview-payer-name"></h3>
+            </section>
+
+            <table class="receipt-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Pemain</th>
+                  <th>No. Pgg</th>
+                  <th>Pertandingan</th>
+                  <th>Kartu</th>
+                  <th class="amount-heading">Jumlah (Rp)</th>
+                </tr>
+              </thead>
+              <tbody id="preview-items"></tbody>
+            </table>
+
+            <div class="receipt-bottom">
+              <div class="amount-words">
+                <span>Terbilang:</span>
+                <strong id="preview-total-words"></strong>
+              </div>
+              <div class="grand-total">
+                <span>TOTAL LUNAS</span>
+                <strong id="preview-total"></strong>
+              </div>
+            </div>
+
+            <footer class="receipt-signature">
+              <span class="receipt-watermark" aria-hidden="true"></span>
+              <div class="signature-block">
+                <p id="preview-signer-title"></p>
+                <div class="signature-image-wrap" id="signature-wrap" hidden>
+                  <img id="preview-signature" alt="Tanda tangan / stempel" />
+                </div>
+                <strong id="preview-signer-name"></strong>
+              </div>
+            </footer>
+
+            <div class="paper-bottom-accent" aria-hidden="true"></div>
+          </article>
+          <p class="preview-hint">Gunakan cetak ukuran A4 atau pilih “Simpan sebagai PDF”.</p>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>
