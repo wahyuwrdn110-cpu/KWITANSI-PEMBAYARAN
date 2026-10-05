@@ -122,7 +122,8 @@ p {
 .page-description {
   margin-bottom: 0;
   color: #7d899a;
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .button {
@@ -152,6 +153,7 @@ p {
 .button-primary svg {
   width: 17px;
   height: 17px;
+  flex: 0 0 auto;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -172,11 +174,11 @@ p {
 
 .form-card {
   margin-bottom: 14px;
-  padding: 20px 21px 22px;
+  padding: 22px 22px 24px;
   border: 1px solid #e8edf3;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fff;
-  box-shadow: 0 3px 12px rgb(27 41 65 / 2%);
+  box-shadow: 0 4px 16px rgb(27 41 65 / 4%);
 }
 
 .section-heading {
@@ -188,6 +190,50 @@ p {
 
 .header-settings {
   padding: 0 21px 22px;
+}
+
+.admin-card {
+  padding: 0 21px 0;
+}
+
+.admin-card[open] {
+  padding-bottom: 22px;
+}
+
+.admin-card > summary {
+  min-height: 72px;
+  margin: 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.admin-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-card[open] > summary {
+  margin-bottom: 18px;
+}
+
+.admin-settings-title {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+}
+
+.admin-settings-title strong {
+  color: #2a3546;
+  font-size: 12px;
+}
+
+.admin-settings-title > span {
+  color: #94a0ae;
+  font-size: 9px;
+}
+
+.admin-card[open] .disclosure-icon {
+  margin-bottom: -4px;
+  transform: rotate(225deg);
 }
 
 .header-settings > summary {
@@ -337,20 +383,21 @@ p {
 .section-heading h2 {
   margin: 0 0 2px;
   color: #2a3546;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .section-heading p {
   margin: 0;
   color: #94a0ae;
-  font-size: 9px;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 13px 12px;
+  gap: 17px 14px;
 }
 
 .field {
@@ -363,9 +410,9 @@ p {
 
 .field label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 7px;
   color: #566275;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -379,18 +426,31 @@ p {
 .field textarea,
 .field select {
   width: 100%;
-  min-height: 36px;
-  padding: 8px 10px;
-  border: 1px solid #e2e7ee;
-  border-radius: 6px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #dce3ec;
+  border-radius: 8px;
   outline: none;
   color: #344155;
   background: #fff;
-  font-size: 10px;
+  font-size: 14px;
+}
+
+.field input[type="date"] {
+  cursor: pointer;
+  color-scheme: light;
+}
+
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  color: #7b8798;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .field textarea {
-  min-height: 52px;
+  min-height: 72px;
   resize: vertical;
   line-height: 1.5;
 }
@@ -404,6 +464,7 @@ p {
 
 .field input::placeholder {
   color: #b0b9c5;
+  font-size: 13px;
 }
 
 .file-input {
@@ -430,11 +491,11 @@ p {
 
 .item-editor-row {
   display: grid;
-  grid-template-columns: minmax(115px, 1.3fr) minmax(62px, 0.55fr) minmax(105px, 1fr);
-  gap: 8px;
-  padding: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px;
   border: 1px solid #edf0f4;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #fbfcfe;
 }
 
@@ -444,9 +505,9 @@ p {
 
 .item-field label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   color: #7b8798;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
 }
 
@@ -454,14 +515,14 @@ p {
 .item-field select {
   width: 100%;
   min-width: 0;
-  height: 33px;
-  padding: 6px 7px;
-  border: 1px solid #e5e9ef;
-  border-radius: 5px;
+  height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #dce3ec;
+  border-radius: 7px;
   outline: none;
   color: #344155;
   background: #fff;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .item-field input:focus,
@@ -469,38 +530,41 @@ p {
   border-color: #87a9d4;
 }
 
+.item-field input[type="date"] {
+  cursor: pointer;
+  color-scheme: light;
+}
+
 .item-field-description {
   grid-column: 1 / -1;
 }
 
-.item-field-match {
-  grid-column: 1 / 2;
-}
-
 .remove-item {
-  min-height: 33px;
-  padding: 0 9px;
-  border: 1px solid #edf0f4;
-  border-radius: 5px;
-  color: #a3adba;
+  width: 100%;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid #f1dada;
+  border-radius: 7px;
+  color: #a24e4e;
   background: #fff;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .remove-item:hover {
-  border-color: #f5caca;
-  color: #df6464;
+  border-color: #e8b7b7;
+  background: #fffafa;
+  color: #c64545;
 }
 
 .button-secondary {
-  min-height: 33px;
+  min-height: 40px;
   margin-top: 12px;
-  padding: 0 11px;
+  padding: 0 14px;
   border: 1px dashed #ccd5e5;
   color: #2866b4;
   background: #fff;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .button-secondary:hover {
@@ -539,6 +603,28 @@ p {
   margin: 0;
   color: #26344a;
   font-size: 16px;
+}
+
+.preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-print-button {
+  min-height: 38px;
+  padding: 0 11px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.preview-print-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.preview-toggle {
+  display: none;
 }
 
 .live-badge {
@@ -918,9 +1004,9 @@ p {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 840px) {
   .app-shell {
-    max-width: 650px;
+    max-width: 100%;
     padding-top: 27px;
   }
 
@@ -928,12 +1014,12 @@ p {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .preview-panel {
-    position: static;
+  .editor-panel {
     grid-row: 1;
   }
 
-  .editor-panel {
+  .preview-panel {
+    position: static;
     grid-row: 2;
   }
 
@@ -954,7 +1040,7 @@ p {
   }
 
   .app-shell {
-    padding: 22px 12px 38px;
+    padding: 18px 8px calc(30px + env(safe-area-inset-bottom));
   }
 
   .page-heading {
@@ -964,12 +1050,46 @@ p {
     margin-bottom: 18px;
   }
 
-  .print-button {
-    width: 100%;
+  .form-card {
+    padding: 15px 10px 17px;
+    margin-bottom: 9px;
   }
 
-  .form-card {
-    padding: 17px 14px 19px;
+  .form-card .section-heading {
+    gap: 7px;
+    margin-bottom: 13px;
+  }
+
+  .form-card .section-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .form-card .section-heading h2 {
+    font-size: 13px;
+  }
+
+  .form-card .section-heading p {
+    font-size: 10px;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+
+  .field input:not([type="file"]),
+  .field textarea,
+  .field select,
+  .item-field input,
+  .item-field select {
+    min-height: 46px;
+    height: 46px;
+    font-size: 16px;
+  }
+
+  .field textarea {
+    height: auto;
   }
 
   .admin-login-form {
@@ -977,91 +1097,162 @@ p {
   }
 
   .header-settings {
-    padding-right: 14px;
-    padding-left: 14px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .admin-card {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .admin-card[open] {
+    padding-bottom: 17px;
   }
 
   .preview-panel {
+    position: static;
+    grid-row: 2;
     padding: 10px;
+    border-color: #d2dcea;
   }
 
-  .receipt-paper {
-    min-height: 550px;
+  .preview-panel:not(.is-expanded) {
+    padding: 7px 10px;
+  }
+
+  .preview-toolbar {
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .preview-toolbar > div {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .preview-toolbar .eyebrow,
+  .preview-panel:not(.is-expanded) .receipt-paper,
+  .preview-panel:not(.is-expanded) .preview-hint {
+    display: none;
+  }
+
+  .preview-toolbar h2 {
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .preview-actions {
+    flex: 1;
+    justify-content: flex-end;
+    gap: 5px;
+  }
+
+  .preview-print-button {
+    min-height: 40px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
+  .preview-print-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .preview-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 7px;
+    color: #fff;
+    background: var(--navy);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .preview-panel.is-expanded .preview-toolbar {
+    margin-bottom: 10px;
+  }
+
+  .preview-panel.is-expanded .receipt-paper {
+    min-height: 0;
+    max-width: 590px;
+    margin: 0 auto;
     padding: 24px 12px 18px;
+    overflow: hidden;
   }
 
-  .receipt-logo {
+  .preview-panel.is-expanded .receipt-logo {
     width: 48px;
     height: 48px;
     flex-basis: 48px;
   }
 
-  .letterhead-text h2,
-  .letterhead-text h3 {
+  .preview-panel.is-expanded .letterhead-text h2,
+  .preview-panel.is-expanded .letterhead-text h3 {
     font-size: 10px;
   }
 
-  .letterhead-text p {
+  .preview-panel.is-expanded .letterhead-text p {
     font-size: 6px;
   }
 
-  .receipt-title h1 {
+  .preview-panel.is-expanded .receipt-title h1 {
     font-size: 12px;
   }
 
-  .receipt-title p {
+  .preview-panel.is-expanded .receipt-title p {
     font-size: 9px;
   }
 
-  .receipt-details {
-    gap: 8px 8px;
+  .preview-panel.is-expanded .receipt-details {
+    gap: 8px;
     padding: 10px 8px;
   }
 
-  .detail-cell {
+  .preview-panel.is-expanded .detail-cell {
     grid-template-columns: 1fr;
     gap: 2px;
     font-size: 7px;
   }
 
-  .detail-cell strong {
+  .preview-panel.is-expanded .detail-cell strong {
     font-size: 7px;
   }
 
-  .receipt-table th {
+  .preview-panel.is-expanded .receipt-table th {
     padding: 6px 2px;
     font-size: 6px;
   }
 
-  .receipt-table td {
+  .preview-panel.is-expanded .receipt-table td {
     padding: 7px 2px;
     font-size: 6.5px;
   }
 
-  .receipt-bottom {
-    gap: 8px;
-  }
-
-  .grand-total strong {
+  .preview-panel.is-expanded .grand-total strong {
     font-size: 10px;
   }
 
+  .preview-panel.is-expanded .receipt-signature {
+    min-height: 100px;
+  }
+
   .item-editor-row {
-    grid-template-columns: minmax(0, 1fr) 65px;
-  }
-
-  .item-field-price,
-  .item-field-card,
-  .item-field-match {
-    grid-column: auto;
-  }
-
-  .item-field-description {
-    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+    padding: 10px;
   }
 
   .remove-item {
     grid-column: 1 / -1;
+    min-height: 44px;
   }
 }
 

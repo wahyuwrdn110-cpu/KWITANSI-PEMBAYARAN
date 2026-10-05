@@ -56,12 +56,14 @@ function addItem(player = "", number = "", match = "", card = "KK", amount = 250
   const numberField = createField("No. punggung", "text", number, "item-number");
   numberField.input.placeholder = "No.";
 
-  const matchField = createField("Pertandingan", "text", match, "item-match");
-  matchField.input.placeholder = "Contoh: 1 Okt 2026";
+  const matchField = createField("Tanggal pertandingan", "date", match, "item-match");
   matchField.wrapper.classList.add("item-field-match");
 
-  const cardField = createField("Kartu", "text", card, "item-card");
-  cardField.input.placeholder = "KK / KM";
+  const cardField = createField("Kartu", "select", card, "item-card", [
+    { value: "KK", label: "Kartu Kuning (KK)" },
+    { value: "KM", label: "Kartu Merah (KM)" },
+  ]);
+  cardField.wrapper.classList.add("item-field-card");
 
   const amountField = createField("Denda (Rp)", "number", amount, "item-amount");
   amountField.input.min = "0";
@@ -92,18 +94,26 @@ function addItem(player = "", number = "", match = "", card = "KK", amount = 250
   updatePreview();
 }
 
-function createField(labelText, type, value, inputClass) {
+function createField(labelText, type, value, inputClass, options = []) {
   const wrapper = document.createElement("div");
   wrapper.className = "item-field";
 
   const label = document.createElement("label");
   label.textContent = labelText;
 
-  const input = document.createElement("input");
-  input.type = type;
+  const input = type === "select" ? document.createElement("select") : document.createElement("input");
+  if (type !== "select") input.type = type;
   input.value = String(value);
   input.setAttribute("aria-label", labelText);
   input.className = inputClass;
+  if (type === "select") {
+    for (const optionData of options) {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      input.append(option);
+    }
+  }
 
   wrapper.append(label, input);
   return { wrapper, input };
@@ -409,7 +419,7 @@ function updatePreview() {
   rows.forEach((row, index) => {
     const player = row.querySelector(".item-player").value.trim() || "—";
     const number = row.querySelector(".item-number").value.trim() || "—";
-    const match = row.querySelector(".item-match").value.trim() || "—";
+    const match = formatDate(row.querySelector(".item-match").value);
     const card = row.querySelector(".item-card").value.trim() || "—";
     const amount = Math.max(0, Number(row.querySelector(".item-amount").value) || 0);
     total += amount;
@@ -475,6 +485,14 @@ for (const id of fieldIds) {
 
 document.querySelector("#add-item-button").addEventListener("click", () => addItem());
 document.querySelector("#print-button").addEventListener("click", () => window.print());
+document.querySelector("#preview-toggle").addEventListener("click", event => {
+  const button = event.currentTarget;
+  const isExpanded = button.getAttribute("aria-expanded") !== "true";
+  const previewPanel = document.querySelector(".preview-panel");
+  previewPanel.classList.toggle("is-expanded", isExpanded);
+  button.setAttribute("aria-expanded", String(isExpanded));
+  button.textContent = isExpanded ? "Tutup preview" : "Lihat preview";
+});
 document.querySelector("#identity-edit-button").addEventListener("click", () => {
   setIdentityEditing(true);
   setHeaderSaveStatus("Edit identitas, lalu tekan “Simpan identitas”. Tekan “Batal” untuk membuang perubahan.");
@@ -556,8 +574,8 @@ document.querySelector("#admin-logout-button").addEventListener("click", async (
 });
 
 setTodayDate();
-addItem("BATRIA PUTRA", "13", "1 Okt 2026", "KK", 25000);
-addItem("GIFAR AZAR", "19", "1 Okt 2026", "KK", 25000);
-addItem("NUR TAHMAD FADILA", "76", "1 Okt 2026", "KK", 25000);
+addItem("BATRIA PUTRA", "13", "2026-10-01", "KK", 25000);
+addItem("GIFAR AZAR", "19", "2026-10-01", "KK", 25000);
+addItem("NUR TAHMAD FADILA", "76", "2026-10-01", "KK", 25000);
 updatePreview();
 initializeSupabase();
